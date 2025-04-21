@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from database import SessionLocal, engine
 from models import Item
-
+from routes.schemas import ItemCreate
 
 router = APIRouter()
 Item.metadata.create_all(bind=engine)
@@ -17,12 +17,12 @@ def get_db():
 
 
 @router.post("/items/")
-def create_item(name: str, description: str, db: Session = Depends(get_db)):
-    item = Item(name=name, description=description)
-    db.add(item)
+def create_item(item: ItemCreate, db: Session = Depends(get_db)):
+    db_item = Item(name=item.name, description=item.description)
+    db.add(db_item)
     db.commit()
-    db.refresh(item)
-    return item
+    db.refresh(db_item)
+    return db_item
 
 
 @router.get("/items/")

@@ -20,7 +20,7 @@ async def echo_get(message: Optional[str] = None):
 @router.post("/echo", response_model=EchoData)
 async def echo_post(data: EchoData):
     """Эхо через POST запрос"""
-    print(data)
+    print("POST: data", data)
     return data
 
 
